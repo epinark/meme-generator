@@ -1,11 +1,11 @@
-
+import MemeGenerator from "./components/MemeGenerator"
 
 function App() {
 
 
   return (
     <>
-      <h1>meme generator</h1>
+      <MemeGenerator />
     </>
   )
 }
