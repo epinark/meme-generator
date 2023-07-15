@@ -1,73 +1,93 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 const MemeGenerator = () => {
-const [memePictures, setMemePictures] = useState([]);
-const [currentMeme, setCurrentMeme] = useState(null);
-const [topText, setTopText] = useState('');
-const [bottomText, setBottomText] = useState('');
+  const [fetchedData, setFetchedData] = useState(null);
+  const [topText, setTopText] = useState("");
+  const [bottomText, setBottomText] = useState("");
+  const [currentMemeIndex, setCurrentMemeIndex] = useState(0);
 
-useEffect(() => {
+  useEffect(() => {
     const fetchMemePictures = async () => {
-        try {
-            const response = await axios.get('https://api.imgflip.com/get_memes');
-            setMemePictures(response.data.data.memes);
-            setCurrentMeme(response.data.data.memes[0]);
-        } catch (error) {
-            console.error(error);
-        }
+      try {
+        const response = await axios.get("https://api.imgflip.com/get_memes");
+
+        setFetchedData(response.data.data.memes);
+      } catch (error) {
+        console.error(error);
+      }
     };
 
     fetchMemePictures();
-}, []);
-return (
+  }, []);
+
+  function goToNextMeme(e) {
+    e.preventDefault();
+    setCurrentMemeIndex((prev) => prev + 1);
+  }
+
+  function goToPreviousMeme(e) {
+    e.preventDefault();
+    setCurrentMemeIndex((prev) => prev - 1);
+  }
+  return (
     <div>
-         <input 
-      type="text"
-      placeholder="Enter top text"
-      value={topText}
-      onChange={(e) => setTopText(e.target.value)}
-   
-    />
-     <input
-      type="text"
-      placeholder="Enter bottom text"
-      value={bottomText}
-      onChange={(e) => setBottomText(e.target.value)}
-    />
-        {currentMeme && (
+      <input
+        type="text"
+        placeholder="Enter top text"
+        value={topText}
+        onChange={(e) => setTopText(e.target.value)}
+      />
+      <input
+        type="text"
+        placeholder="Enter bottom text"
+        value={bottomText}
+        onChange={(e) => setBottomText(e.target.value)}
+      />
+      {fetchedData !== null && (
+        <div>
+          <img
+            src={fetchedData[currentMemeIndex].url}
+            alt={fetchedData[currentMemeIndex].name}
+          />
+          <div
+            style={{
+              position: "absolute",
+              top: "10px",
+              left: "10px",
+              color: "white",
+              fontSize: "24px",
+              fontFamily: "impact",
+              textShadow: "1px 1px 1px black",
+            }}
+          >
+            {topText}
+          </div>
+          <div
+            style={{
+              position: "absolute",
+              bottom: "10px",
+              left: "10px",
+              color: "white",
+              fontSize: "24px",
+              fontFamily: "impact",
+              textShadow: "1px 1px 1px black",
+            }}
+          >
+            {bottomText}
+          </div>
+        </div>
+      )}
       <div>
-        <img src={currentMeme.url} alt={currentMeme.name} />
-        <div
-          style={{
-            position: 'absolute',
-            top: '10px',
-            left: '10px',
-            color: 'white',
-            fontSize: '24px',
-            fontFamily:'impact',
-            textShadow: '1px 1px 1px black',
-          }}
-        >
-          {topText}
-        </div>
-        <div
-          style={{
-            position: 'absolute',
-            bottom: '10px',
-            left: '10px',
-            color: 'white',
-            fontSize: '24px',
-            fontFamily:'impact',
-            textShadow: '1px 1px 1px black',
-          }}
-        >
-          {bottomText}
-        </div>
+        <button id="button" onClick={goToPreviousMeme}>
+          Previous
+        </button>
+        <button id="button" onClick={goToNextMeme}>
+          Next
+        </button>
       </div>
-    )}
-  </div>
-);
-}
+    </div>
+  );
+};
 
 export default MemeGenerator;
