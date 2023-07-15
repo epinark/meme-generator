@@ -49,40 +49,17 @@ const MemeGenerator = () => {
         />
       </form>
       {fetchedData !== null && (
-        <div>
+        <div id="textWrapper">
           <img
             src={fetchedData[currentMemeIndex].url}
             alt={fetchedData[currentMemeIndex].name}
+            id="memeImage"
           />
-          <div
-            style={{
-              position: "absolute",
-              top: "10px",
-              left: "10px",
-              color: "white",
-              fontSize: "24px",
-              fontFamily: "impact",
-              textShadow: "1px 1px 1px black",
-            }}
-          >
-            {topText}
-          </div>
-          <div
-            style={{
-              position: "absolute",
-              bottom: "10px",
-              left: "10px",
-              color: "white",
-              fontSize: "24px",
-              fontFamily: "impact",
-              textShadow: "1px 1px 1px black",
-            }}
-          >
-            {bottomText}
-          </div>
+          <div id="topText">{topText}</div>
+          <div id="bottomText">{bottomText}</div>
         </div>
       )}
-      <div>
+      <div id="buttonWrapper">
         <button id="button" onClick={goToPreviousMeme}>
           Previous
         </button>
