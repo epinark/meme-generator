@@ -2,17 +2,17 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 
 const MemeGenerator = () => {
-  const [memePictures, setMemePictures] = useState([]);
-  const [currentMeme, setCurrentMeme] = useState(null);
+  const [fetchedData, setFetchedData] = useState(null);
   const [topText, setTopText] = useState("");
   const [bottomText, setBottomText] = useState("");
+  const [currentMemeIndex, setCurrentMemeIndex] = useState(0);
 
   useEffect(() => {
     const fetchMemePictures = async () => {
       try {
         const response = await axios.get("https://api.imgflip.com/get_memes");
-        setMemePictures(response.data.data.memes);
-        setCurrentMeme(response.data.data.memes[2]);
+
+        setFetchedData(response.data.data.memes);
       } catch (error) {
         console.error(error);
       }
@@ -20,6 +20,16 @@ const MemeGenerator = () => {
 
     fetchMemePictures();
   }, []);
+
+  function goToNextMeme(e) {
+    e.preventDefault();
+    setCurrentMemeIndex((prev) => prev + 1);
+  }
+
+  function goToPreviousMeme(e) {
+    e.preventDefault();
+    setCurrentMemeIndex((prev) => prev - 1);
+  }
   return (
     <div id="generatorWrapper">
       <form id="generatorContainer">
@@ -38,9 +48,12 @@ const MemeGenerator = () => {
           onChange={(e) => setBottomText(e.target.value)}
         />
       </form>
-      {currentMeme && (
+      {fetchedData !== null && (
         <div>
-          <img src={currentMeme.url} alt={currentMeme.name} />
+          <img
+            src={fetchedData[currentMemeIndex].url}
+            alt={fetchedData[currentMemeIndex].name}
+          />
           <div
             style={{
               position: "absolute",
@@ -69,6 +82,14 @@ const MemeGenerator = () => {
           </div>
         </div>
       )}
+      <div>
+        <button id="button" onClick={goToPreviousMeme}>
+          Previous
+        </button>
+        <button id="button" onClick={goToNextMeme}>
+          Next
+        </button>
+      </div>
     </div>
   );
 };
