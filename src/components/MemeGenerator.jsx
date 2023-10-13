@@ -24,6 +24,8 @@ const MemeGenerator = () => {
   function goToNextMeme(e) {
     e.preventDefault();
     setCurrentMemeIndex((prev) => prev + 1);
+    setTopText("");
+    setBottomText("");
   }
 
   function goToPreviousMeme(e) {
@@ -32,22 +34,26 @@ const MemeGenerator = () => {
   }
   return (
     <div id="generatorWrapper">
-      <form id="generatorContainer">
-        <label htmlFor="topText">Text on the top: </label>
-        <input
-          type="text"
-          placeholder="Enter top text"
-          value={topText}
-          onChange={(e) => setTopText(e.target.value)}
-        />
-        <label htmlFor="bottomText">Text on the bottom: </label>
-        <input
-          type="text"
-          placeholder="Enter bottom text"
-          value={bottomText}
-          onChange={(e) => setBottomText(e.target.value)}
-        />
-      </form>
+      {fetchedData && (
+        <form id="generatorContainer">
+          <label htmlFor="topText">Text on the top: </label>
+          <input
+            id="input"
+            type="text"
+            placeholder="Enter top text"
+            value={topText}
+            onChange={(e) => setTopText(e.target.value)}
+          />
+          <label htmlFor="bottomText">Text on the bottom: </label>
+          <input
+            id="input"
+            type="text"
+            placeholder="Enter bottom text"
+            value={bottomText}
+            onChange={(e) => setBottomText(e.target.value)}
+          />
+        </form>
+      )}
       {fetchedData !== null && (
         <div id="textWrapper">
           <img
